@@ -5,7 +5,7 @@ a = Analysis(
     ['MainWindow.py'],
     pathex=[],
     binaries=[],
-    datas=[('OME.ico', '.')],
+    datas=[('OME.ico', '.'), ('BGP.jpg', '.'), ('BGP2.png', '.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

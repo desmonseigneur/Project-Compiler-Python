@@ -5,6 +5,7 @@ from PyQt6.QtWidgets import QFileDialog, QMessageBox
 from datetime import datetime  # Required for date handling
 import os  # For file system operations
 import shutil  # For file copying
+import sys
 from ProjectsList import Ui_Project_Window
 
 class Ui_Main_Window(object):
@@ -13,126 +14,139 @@ class Ui_Main_Window(object):
 
     def setupUi(self, Main_Window):
         Main_Window.setObjectName("Main_Window")
-        Main_Window.setFixedSize(330, 670)  # Fix the size of the window
+        Main_Window.setFixedSize(380, 670)  # Fix the size of the window
         Main_Window.setWindowFlags(Main_Window.windowFlags() & ~QtCore.Qt.WindowType.WindowMaximizeButtonHint)  # Remove maximize button
         Main_Window.setTabShape(QtWidgets.QTabWidget.TabShape.Rounded)
         self.centralwidget = QtWidgets.QWidget(parent=Main_Window)
         self.centralwidget.setObjectName("centralwidget")
+        bg_image_path = Ui_Main_Window.resource_path("BGP.jpg")
+        Main_Window.setStyleSheet(f"""
+               QMainWindow {{
+                   background-image: url("{bg_image_path.replace('\\', '/')}");
+                   background-repeat: no-repeat;
+                   background-position: center;
+                   background-size: cover;
+               }}
+           """)
+        self.WM_lb = QtWidgets.QLabel(parent=self.centralwidget)
+        self.WM_lb.setGeometry(QtCore.QRect(3, 2, 150, 20))
+        self.WM_lb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
+        self.WM_lb.setObjectName("WM_lb")
         self.Enc_lb = QtWidgets.QLabel(parent=self.centralwidget)
-        self.Enc_lb.setGeometry(QtCore.QRect(104, 463, 47, 16)) #63,
+        self.Enc_lb.setGeometry(QtCore.QRect(148, 463, 200, 16))
         self.Enc_lb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.Enc_lb.setObjectName("Enc_lb")
         self.Title_lb = QtWidgets.QLabel(parent=self.centralwidget)
-        self.Title_lb.setGeometry(QtCore.QRect(41, 58, 111, 16)) #104,
+        self.Title_lb.setGeometry(QtCore.QRect(54, 54, 200, 25)) #104,
         self.Title_lb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.Title_lb.setObjectName("Title_lb")
         self.Loc_lb = QtWidgets.QLabel(parent=self.centralwidget)
-        self.Loc_lb.setGeometry(QtCore.QRect(102, 85, 61, 16)) #41,
+        self.Loc_lb.setGeometry(QtCore.QRect(145, 85, 200, 16)) #41,
         self.Loc_lb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.Loc_lb.setObjectName("Loc_lb")
         self.ProjCoord_lb = QtWidgets.QLabel(parent=self.centralwidget)
-        self.ProjCoord_lb.setGeometry(QtCore.QRect(43, 112, 111, 16)) #102,
+        self.ProjCoord_lb.setGeometry(QtCore.QRect(60, 112, 200, 16)) #102,
         self.ProjCoord_lb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ProjCoord_lb.setObjectName("ProjCoord_lb")
         self.Cont_lb = QtWidgets.QLabel(parent=self.centralwidget)
-        self.Cont_lb.setGeometry(QtCore.QRect(96, 139, 61, 16)) #43,
+        self.Cont_lb.setGeometry(QtCore.QRect(128, 139, 200, 16)) #43,
         self.Cont_lb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.Cont_lb.setObjectName("Cont_lb")
         self.SOF_lb = QtWidgets.QLabel(parent=self.centralwidget)
-        self.SOF_lb.setGeometry(QtCore.QRect(67, 166, 91, 16)) #96,
+        self.SOF_lb.setGeometry(QtCore.QRect(96, 166, 200, 16)) #96,
         self.SOF_lb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.SOF_lb.setObjectName("SOF_lb")
         self.TC_lb = QtWidgets.QLabel(parent=self.centralwidget)
-        self.TC_lb.setGeometry(QtCore.QRect(103, 193, 61, 16)) #67,
+        self.TC_lb.setGeometry(QtCore.QRect(147, 193, 200, 16)) #67,
         self.TC_lb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.TC_lb.setObjectName("TC_lb")
         self.AB_lb = QtWidgets.QLabel(parent=self.centralwidget)
-        self.AB_lb.setGeometry(QtCore.QRect(124, 220, 101, 16)) #95,
+        self.AB_lb.setGeometry(QtCore.QRect(178, 220, 200, 16)) #95,
         self.AB_lb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.AB_lb.setObjectName("AB_lb")
         self.DON_lb = QtWidgets.QLabel(parent=self.centralwidget)
-        self.DON_lb.setGeometry(QtCore.QRect(61, 247, 88, 16)) #53,
+        self.DON_lb.setGeometry(QtCore.QRect(87, 247, 200, 16)) #53,
         self.DON_lb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.DON_lb.setObjectName("DON_lb")
         self.DS_lb = QtWidgets.QLabel(parent=self.centralwidget)
-        self.DS_lb.setGeometry(QtCore.QRect(81, 274, 71, 16)) #70,
+        self.DS_lb.setGeometry(QtCore.QRect(115, 274, 200, 16)) #70,
         self.DS_lb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.DS_lb.setObjectName("DS_lb")
         self.DTC_lb = QtWidgets.QLabel(parent=self.centralwidget)
-        self.DTC_lb.setGeometry(QtCore.QRect(7, 301, 160, 16)) #81,
+        self.DTC_lb.setGeometry(QtCore.QRect(10, 297, 210, 25)) #81,
         self.DTC_lb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.DTC_lb.setObjectName("DTC_lb")
         self.CD_lb = QtWidgets.QLabel(parent=self.centralwidget)
-        self.CD_lb.setGeometry(QtCore.QRect(8, 328, 150, 16)) #7,
+        self.CD_lb.setGeometry(QtCore.QRect(11, 328, 210, 16)) #7,
         self.CD_lb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.CD_lb.setObjectName("CD_lb")
         self.Ext_lb = QtWidgets.QLabel(parent=self.centralwidget)
-        self.Ext_lb.setGeometry(QtCore.QRect(50, 355, 101, 16)) #35,
+        self.Ext_lb.setGeometry(QtCore.QRect(71, 355, 150, 16)) #35,
         self.Ext_lb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.Ext_lb.setObjectName("Ext_lb")
         self.ProjStat_lb = QtWidgets.QLabel(parent=self.centralwidget)
-        self.ProjStat_lb.setGeometry(QtCore.QRect(54, 382, 101, 16)) #50,
+        self.ProjStat_lb.setGeometry(QtCore.QRect(75, 378, 200, 25)) #50,
         self.ProjStat_lb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ProjStat_lb.setObjectName("ProjStat_lb")
         self.TCI_lb = QtWidgets.QLabel(parent=self.centralwidget)
-        self.TCI_lb.setGeometry(QtCore.QRect(5, 409, 160, 16)) #54,
+        self.TCI_lb.setGeometry(QtCore.QRect(7, 409, 220, 16)) #54,
         self.TCI_lb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.TCI_lb.setObjectName("TCI_lb")
         self.ID_lb = QtWidgets.QLabel(parent=self.centralwidget)
-        self.ID_lb.setGeometry(QtCore.QRect(29, 436, 150, 16))
+        self.ID_lb.setGeometry(QtCore.QRect(42, 432, 200, 25))
         self.ID_lb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.ID_lb.setObjectName("ID_lb")
         self.Photos_lb = QtWidgets.QLabel(parent=self.centralwidget)
-        self.Photos_lb.setGeometry(QtCore.QRect(109, 490, 41, 16))
+        self.Photos_lb.setGeometry(QtCore.QRect(157, 490, 100, 16))
         self.Photos_lb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.Photos_lb.setObjectName("Photos_lb")
         self.Documents_lb = QtWidgets.QLabel(parent=self.centralwidget)
-        self.Documents_lb.setGeometry(QtCore.QRect(85, 519, 62, 16))
+        self.Documents_lb.setGeometry(QtCore.QRect(124, 519, 100, 16))
         self.Documents_lb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.Documents_lb.setObjectName("Documents_lb")
         self.Remarks_lb = QtWidgets.QLabel(parent=self.centralwidget)
-        self.Remarks_lb.setGeometry(QtCore.QRect(101, 550, 51, 16))
+        self.Remarks_lb.setGeometry(QtCore.QRect(145, 550, 100, 16))
         self.Remarks_lb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.Remarks_lb.setObjectName("Remarks_lb")
         self.ProjectsList_btn = QtWidgets.QPushButton(parent=self.centralwidget)
-        self.ProjectsList_btn.setGeometry(QtCore.QRect(225, 6, 101, 31))
+        self.ProjectsList_btn.setGeometry(QtCore.QRect(275, 6, 101, 31))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.ProjectsList_btn.setFont(font)
         self.ProjectsList_btn.setObjectName("ProjectsList_btn")
         self.ProjectsList_btn.clicked.connect(self.show_project_window)
         self.Upload_btn = QtWidgets.QPushButton(parent=self.centralwidget)
-        self.Upload_btn.setGeometry(QtCore.QRect(160, 490, 75, 24))
+        self.Upload_btn.setGeometry(QtCore.QRect(215, 490, 75, 24))
         self.Upload_btn.setObjectName("Upload_btn")
         self.Upload_btn.clicked.connect(self.upload_images)
         self.UploadDoc_btn = QtWidgets.QPushButton(parent=self.centralwidget)
-        self.UploadDoc_btn.setGeometry(QtCore.QRect(160, 519, 75, 24))
+        self.UploadDoc_btn.setGeometry(QtCore.QRect(215, 519, 75, 24))
         self.UploadDoc_btn.setObjectName("UploadDoc_btn")
         self.UploadDoc_btn.clicked.connect(self.upload_documents)
         self.Open_btn = QtWidgets.QPushButton(parent=self.centralwidget)
-        self.Open_btn.setGeometry(QtCore.QRect(238, 490, 75, 24))
+        self.Open_btn.setGeometry(QtCore.QRect(290, 490, 75, 24))
         self.Open_btn.setObjectName("Open_btn")
         self.Open_btn.clicked.connect(self.open_project_folder)
         self.OpenDoc_btn = QtWidgets.QPushButton(parent=self.centralwidget)
-        self.OpenDoc_btn.setGeometry(QtCore.QRect(238, 519, 75, 24))
+        self.OpenDoc_btn.setGeometry(QtCore.QRect(290, 519, 75, 24))
         self.OpenDoc_btn.setObjectName("OpenDoc_btn")
         self.OpenDoc_btn.clicked.connect(self.open_document_folder)
         self.ClearAll_btn = QtWidgets.QPushButton(parent=self.centralwidget)
-        self.ClearAll_btn.setGeometry(QtCore.QRect(110, 634, 101, 31))
+        self.ClearAll_btn.setGeometry(QtCore.QRect(170, 634, 101, 31))
         self.ClearAll_btn.clicked.connect(self.clear_all_fields)  # Connect the clear button to the handler
         font = QtGui.QFont()
         font.setPointSize(11)
         self.ClearAll_btn.setFont(font)
         self.ClearAll_btn.setObjectName("ClearAll_btn")
         self.Submit_btn = QtWidgets.QPushButton(parent=self.centralwidget)
-        self.Submit_btn.setGeometry(QtCore.QRect(212, 634, 101, 31))
+        self.Submit_btn.setGeometry(QtCore.QRect(275, 634, 101, 31))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.Submit_btn.setFont(font)
         self.Submit_btn.setObjectName("Submit_btn")
         self.Submit_btn.clicked.connect(self.submit_data)  # Connect the submit button to the handler
         self.Edit_btn = QtWidgets.QPushButton(parent=self.centralwidget)
-        self.Edit_btn.setGeometry(QtCore.QRect(212, 634, 101, 31))  # Same position and size as Submit_btn
+        self.Edit_btn.setGeometry(QtCore.QRect(275, 634, 101, 31))  # Same position and size as Submit_btn
         font = QtGui.QFont()
         font.setPointSize(11)
         self.Edit_btn.setFont(font)
@@ -140,7 +154,7 @@ class Ui_Main_Window(object):
         self.Edit_btn.clicked.connect(self.save_edit_data)
         self.Edit_btn.setVisible(False)
         self.CancelEdit_btn = QtWidgets.QPushButton(parent=self.centralwidget)
-        self.CancelEdit_btn.setGeometry(QtCore.QRect(110, 634, 101, 31))  # Aligned beside ClearAll_btn
+        self.CancelEdit_btn.setGeometry(QtCore.QRect(170, 634, 101, 31))  # Aligned beside ClearAll_btn
         font = QtGui.QFont()
         font.setPointSize(11)
         self.CancelEdit_btn.setFont(font)
@@ -151,13 +165,13 @@ class Ui_Main_Window(object):
         self.Id_Line.setGeometry(QtCore.QRect(1, 1, 1, 1))
         self.Id_Line.setObjectName("Id_Line")
         self.Enc_Line = QtWidgets.QLineEdit(parent=self.centralwidget)
-        self.Enc_Line.setGeometry(QtCore.QRect(160, 463, 161, 21)) #
+        self.Enc_Line.setGeometry(QtCore.QRect(215, 463, 161, 21)) #
         self.Enc_Line.setObjectName("Enc_Line")
         self.Title_Line = QtWidgets.QLineEdit(parent=self.centralwidget)
-        self.Title_Line.setGeometry(QtCore.QRect(160, 58, 161, 21)) #
+        self.Title_Line.setGeometry(QtCore.QRect(215, 58, 161, 21)) #
         self.Title_Line.setObjectName("Title_Line")
         self.Loc_cb = QtWidgets.QComboBox(parent=self.centralwidget)
-        self.Loc_cb.setGeometry(QtCore.QRect(160, 85, 161, 21)) #
+        self.Loc_cb.setGeometry(QtCore.QRect(215, 85, 161, 21)) #
         self.Loc_cb.setEditable(True)
         self.Loc_cb.setCurrentText("")
         self.Loc_cb.setMaxVisibleItems(10)
@@ -228,13 +242,13 @@ class Ui_Main_Window(object):
         self.Loc_cb.addItem("")
         self.Loc_cb.addItem("")
         self.ProjCoord_Line = QtWidgets.QLineEdit(parent=self.centralwidget)
-        self.ProjCoord_Line.setGeometry(QtCore.QRect(160, 112, 161, 21)) #
+        self.ProjCoord_Line.setGeometry(QtCore.QRect(215, 112, 161, 21)) #
         self.ProjCoord_Line.setObjectName("ProjCoord_Line")
         self.Cont_Line = QtWidgets.QLineEdit(parent=self.centralwidget)
-        self.Cont_Line.setGeometry(QtCore.QRect(160, 139, 161, 21)) #
+        self.Cont_Line.setGeometry(QtCore.QRect(215, 139, 161, 21)) #
         self.Cont_Line.setObjectName("Cont_Line")
         self.SOF_cb = QtWidgets.QComboBox(parent=self.centralwidget)
-        self.SOF_cb.setGeometry(QtCore.QRect(160, 166, 161, 21))  #
+        self.SOF_cb.setGeometry(QtCore.QRect(215, 166, 161, 21))  #
         self.SOF_cb.setObjectName("SOF_cb")
         self.SOF_cb.setEditable(False)
         self.SOF_cb.addItems([
@@ -242,61 +256,61 @@ class Ui_Main_Window(object):
             "For Funding", "General Fund", "IRA", "LSB", "Municipal Fund"
         ])
         self.TC_Line = QtWidgets.QLineEdit(parent=self.centralwidget)
-        self.TC_Line.setGeometry(QtCore.QRect(160, 193, 161, 21)) #
+        self.TC_Line.setGeometry(QtCore.QRect(215, 193, 161, 21)) #
         self.TC_Line.setObjectName("TC_Line")
         self.TC_Line.textChanged.connect(lambda: self.format_line_text(self.TC_Line))
         self.AB_Line = QtWidgets.QLineEdit(parent=self.centralwidget)
-        self.AB_Line.setGeometry(QtCore.QRect(160, 220, 161, 21)) #
+        self.AB_Line.setGeometry(QtCore.QRect(215, 220, 161, 21)) #
         self.AB_Line.setObjectName("AB_Line")
         self.AB_Line.textChanged.connect(lambda: self.format_line_text(self.AB_Line))
         self.DON_Date = QtWidgets.QDateEdit(parent=self.centralwidget)
-        self.DON_Date.setGeometry(QtCore.QRect(160, 247, 161, 21)) #160, 247
+        self.DON_Date.setGeometry(QtCore.QRect(215, 247, 161, 21)) #215, 247
         self.DON_Date.setCurrentSection(QtWidgets.QDateTimeEdit.Section.MonthSection)
         self.DON_Date.setCalendarPopup(True)
         self.DON_Date.setTimeSpec(QtCore.Qt.TimeSpec.LocalTime)
         self.DON_Date.setDate(QDate.currentDate())
         self.DON_Date.setObjectName("DON_Date")
         self.DS_Date = QtWidgets.QDateEdit(parent=self.centralwidget)
-        self.DS_Date.setGeometry(QtCore.QRect(160, 274, 161, 21)) #
+        self.DS_Date.setGeometry(QtCore.QRect(215, 274, 161, 21)) #
         self.DS_Date.setCalendarPopup(True)
         self.DS_Date.setCurrentSectionIndex(0)
         self.DS_Date.setTimeSpec(QtCore.Qt.TimeSpec.LocalTime)
         self.DS_Date.setDate(QDate.currentDate())
         self.DS_Date.setObjectName("DS_Date")
         self.DTC_Date = QtWidgets.QDateEdit(parent=self.centralwidget)
-        self.DTC_Date.setGeometry(QtCore.QRect(160, 301, 161, 21)) #
+        self.DTC_Date.setGeometry(QtCore.QRect(215, 301, 161, 21)) #
         self.DTC_Date.setCalendarPopup(True)
         self.DTC_Date.setTimeSpec(QtCore.Qt.TimeSpec.LocalTime)
         self.DTC_Date.setDate(QDate.currentDate())
         self.DTC_Date.setObjectName("DTC_Date")
         self.CD_sb = QtWidgets.QSpinBox(parent=self.centralwidget)
-        self.CD_sb.setGeometry(QtCore.QRect(160, 328, 49, 21)) #
+        self.CD_sb.setGeometry(QtCore.QRect(215, 328, 49, 21)) #
         self.CD_sb.setMaximum(3650)
         self.CD_sb.setProperty("value", 0)
         self.CD_sb.setObjectName("CD_sb")
         self.CD_sb.editingFinished.connect(self.update_dtc_date_from_cd)
         self.Ext_sb = QtWidgets.QSpinBox(parent=self.centralwidget)
-        self.Ext_sb.setGeometry(QtCore.QRect(160, 355, 49, 21)) #
+        self.Ext_sb.setGeometry(QtCore.QRect(215, 355, 49, 21)) #
         self.Ext_sb.setMaximum(3650)
         self.Ext_sb.setProperty("value", 0)
         self.Ext_sb.setObjectName("Ext_sb")
         self.ProjStat_sb = QtWidgets.QSpinBox(parent=self.centralwidget)
-        self.ProjStat_sb.setGeometry(QtCore.QRect(160, 382, 49, 21)) #
+        self.ProjStat_sb.setGeometry(QtCore.QRect(215, 382, 49, 21)) #
         self.ProjStat_sb.setMaximum(100)
         self.ProjStat_sb.setProperty("value", 0)
         self.ProjStat_sb.setObjectName("ProjStat_sb")
         self.TCI_Line = QtWidgets.QLineEdit(parent=self.centralwidget)
-        self.TCI_Line.setGeometry(QtCore.QRect(160, 409, 161, 21)) #
+        self.TCI_Line.setGeometry(QtCore.QRect(215, 409, 161, 21)) #
         self.TCI_Line.setObjectName("TCI_Line")
         self.TCI_Line.textChanged.connect(lambda: self.format_line_text(self.TCI_Line))
         self.ID_Date = QtWidgets.QDateEdit(parent=self.centralwidget)
-        self.ID_Date.setGeometry(QtCore.QRect(160, 436, 161, 21)) #
+        self.ID_Date.setGeometry(QtCore.QRect(215, 436, 161, 21)) #
         self.ID_Date.setTimeSpec(QtCore.Qt.TimeSpec.LocalTime)
         self.ID_Date.setDate(QDate.currentDate())
         self.ID_Date.setObjectName("ID_Date")
         self.ID_Date.setCalendarPopup(True)
         self.Remarks_Line = QtWidgets.QPlainTextEdit(parent=self.centralwidget)
-        self.Remarks_Line.setGeometry(QtCore.QRect(160, 550, 161, 75))
+        self.Remarks_Line.setGeometry(QtCore.QRect(215, 550, 161, 75))
         self.Remarks_Line.setObjectName("plainTextEdit")
         Main_Window.setCentralWidget(self.centralwidget)
 
@@ -304,12 +318,32 @@ class Ui_Main_Window(object):
         self.Loc_cb.setCurrentIndex(-1)
         self.SOF_cb.setCurrentIndex(-1)
         QtCore.QMetaObject.connectSlotsByName(Main_Window)
+        self.apply_font_border(self.Enc_lb, "Encoder:", font_size=12)
+        self.apply_font_border(self.Title_lb, "Project/Activity Title:", font_size=12)
+        self.apply_font_border(self.Loc_lb, "Location:", font_size=12)
+        self.apply_font_border(self.ProjCoord_lb, "Project Coordinator:", font_size=12)
+        self.apply_font_border(self.Cont_lb, "Contractor:", font_size=12)
+        self.apply_font_border(self.SOF_lb, "Source of Fund:", font_size=12)
+        self.apply_font_border(self.TC_lb, "Bid Cost:", font_size=12)
+        self.apply_font_border(self.AB_lb, "ABC:", font_size=12)
+        self.apply_font_border(self.DON_lb, "Notice of Award:", font_size=12)
+        self.apply_font_border(self.DS_lb, "Date Started:", font_size=12)
+        self.apply_font_border(self.DTC_lb, "Date of Target Completion:", font_size=12)
+        self.apply_font_border(self.CD_lb, "Duration of Calendar Days:", font_size=12)
+        self.apply_font_border(self.Ext_lb, "No. of Extension/s:", font_size=12)
+        self.apply_font_border(self.ProjStat_lb, "Project Status (%):", font_size=12)
+        self.apply_font_border(self.TCI_lb, "Total Cost Incurred to Date:", font_size=12)
+        self.apply_font_border(self.ID_lb, "Latest Inspection Date:", font_size=12)
+        self.apply_font_border(self.Photos_lb, "Photos:", font_size=12)
+        self.apply_font_border(self.Documents_lb, "Documents:", font_size=12)
+        self.apply_font_border(self.Remarks_lb, "Remarks:", font_size=12)
 
         self.setupDatabase()
 
     def retranslateUi(self, Main_Window):
         _translate = QtCore.QCoreApplication.translate
         Main_Window.setWindowTitle(_translate("Main_Window", "Municipal\'s Project Compiler"))
+        self.WM_lb.setText(_translate("Main_Window", "Developed by: J. Masunsong"))
         self.Enc_lb.setText(_translate("Main_Window", "Encoder:"))
         self.Title_lb.setText(_translate("Main_Window", "Project/Activity Title:"))
         self.Loc_lb.setText(_translate("Main_Window", "Location:"))
@@ -415,6 +449,49 @@ class Ui_Main_Window(object):
         self.DTC_Date.setDisplayFormat(_translate("Main_Window", "MMMM  dd  yyyy"))
         self.ID_Date.setDisplayFormat(_translate("Main_Window", "MMMM  dd  yyyy"))
 
+    @staticmethod
+    def resource_path(relative_path):
+        """ Get the absolute path to a resource, works for PyInstaller """
+        try:
+            base_path = sys._MEIPASS  # PyInstaller temporary directory
+        except AttributeError:
+            base_path = os.path.abspath(".")  # Fallback to current directory (for development)
+        return os.path.join(base_path, relative_path)
+
+    def apply_font_border(self, label, text, font_size=14, text_color="white", border_color="black"):
+        """
+        Apply a simulated font border by layering QLabel objects for a border-like effect.
+        """
+        font = QtGui.QFont()
+        font.setPointSize(font_size)
+        font.setBold(True)
+
+        # Create the outline QLabel
+        outline_label = QtWidgets.QLabel(parent=self.centralwidget)
+        outline_label.setText(text)
+        outline_label.setFont(font)
+        outline_label.setStyleSheet(f"color: {border_color};")
+        outline_label.setGeometry(label.geometry())  # Position it like the main label
+        outline_label.move(label.x() - 1, label.y() - 1)  # Offset for top-left border
+        outline_label.show()
+
+        # Repeat for other edges of the border
+        for dx, dy in [(1, -1), (-1, 1), (1, 1)]:
+            shadow = QtWidgets.QLabel(parent=self.centralwidget)
+            shadow.setText(text)
+            shadow.setFont(font)
+            shadow.setStyleSheet(f"color: {border_color};")
+            shadow.setGeometry(label.geometry())
+            shadow.move(label.x() + dx, label.y() + dy)  # Offset for emulating the edges
+            shadow.show()
+
+        # Original QLabel for the main text (on top of border layers)
+        label.setText(text)
+        label.setFont(font)
+        label.setStyleSheet(f"color: {text_color};")
+        label.raise_()
+        label.show()
+
     def setupDatabase(self):
         self.db = QSqlDatabase.addDatabase('QMYSQL')
         self.db.setHostName('192.168.141.214')
@@ -495,106 +572,104 @@ class Ui_Main_Window(object):
         self.Loc_cb.setCurrentIndex(-1)
         self.Loc_cb.setEditText("")
 
-    def get_shared_folder_path(self):
-        shared_folder_path = r"\\192.168.141.214\Shared MPC Files\Shared MPC Files\Pictures"
+    def get_shared_folder_path(self, folder_type="Pictures"):
+        base_shared_folder_path = r"\\DESKTOP-AEI2HOG\Shared MPC Files"
+        shared_folder_path = os.path.join(base_shared_folder_path, folder_type)
         if not os.path.exists(shared_folder_path):
-            raise Exception(f"The shared folder '{shared_folder_path}' does not exist or is inaccessible!")
+            raise Exception(f"The shared folder '{shared_folder_path}' does not exist!")
+        if not os.access(shared_folder_path, os.R_OK | os.W_OK):
+            raise Exception(f"The shared folder '{shared_folder_path}' is not accessible! Please check permissions.")
         return shared_folder_path
+
+    @staticmethod
+    def get_unique_folder_path(base_path):
+        if not os.path.exists(base_path):
+            return base_path
+        counter = 1
+        unique_path = base_path
+        while os.path.exists(unique_path):
+            unique_path = f"{base_path} ({counter})"
+            counter += 1
+        return unique_path
+
+    def get_fallback_folder(self, base_path):
+        fallback_folder = os.path.join(os.environ["USERPROFILE"], "Fallback Storage")
+        if not os.path.exists(fallback_folder):
+            os.makedirs(fallback_folder)
+        return fallback_folder
+
+    @staticmethod
+    def sanitize_string(input_string):
+        return "".join(c for c in input_string if c not in r'\/:*?"<>|')
 
     def upload_images(self):
         project_title = self.Title_Line.text().strip()
         if not project_title:
             QMessageBox.warning(None, "Warning", "Please enter a Project/Activity Title before uploading!")
             return
-        sanitized_title = "".join(c for c in project_title if c not in r'\/:*?"<>|')
-        output_folder = os.path.join(sanitized_title)  # Do not replace spaces with underscores
-        # Allow the user to select multiple image files (jpg, jpeg, png)
-        file_dialog = QFileDialog()
-        file_dialog.setFileMode(QFileDialog.FileMode.ExistingFiles)
-        file_dialog.setNameFilters(["Image Files (*.jpg *.jpeg *.png)"])
-        selected_files, _ = file_dialog.getOpenFileNames(self.centralwidget, "Select Images")
+        sanitized_title = self.sanitize_string(project_title)
 
-        if not selected_files:
-            # If no files are selected, return
-            return
-
-        # Step 1: Get the dynamic shared pictures folder path
         try:
-            shared_pictures_path = self.get_shared_folder_path()  # Fetch the shared folder path
-        except Exception as e:
-            QMessageBox.critical(self.centralwidget, "Shared Folder Error", f"Error accessing shared folder: {str(e)}")
-            return
-        output_folder = os.path.join(shared_pictures_path, project_title)
-        if not os.path.exists(output_folder):
-            try:
-                os.makedirs(output_folder)
-            except Exception as e:
-                QMessageBox.critical(self.centralwidget, "Folder Creation Error", f"Error creating folder '{output_folder}': {str(e)}")
-                return
-        if not os.path.exists(output_folder):
+            shared_pictures_path = self.get_shared_folder_path(folder_type="Pictures")
+            output_folder = os.path.join(shared_pictures_path, sanitized_title)
+            output_folder = self.get_unique_folder_path(output_folder)  # Reuse the helper method
             os.makedirs(output_folder)
-
-        # Step 3: Copy the selected files to the created folder
-        for file_path in selected_files:
-            try:
-                shutil.copy(file_path, output_folder)
-            except Exception as e:
-                QMessageBox.critical(None, "Error", f"Could not copy file {file_path}: {str(e)}")
+            file_dialog = QFileDialog()
+            file_dialog.setFileMode(QFileDialog.FileMode.ExistingFiles)
+            file_dialog.setNameFilters(["Image Files (*.jpg *.jpeg *.png)"])
+            selected_files, _ = file_dialog.getOpenFileNames(self.centralwidget, "Select Images")
+            if not selected_files:
                 return
-
-        # Step 4: Notify the user that files were uploaded successfully
-        QMessageBox.information(None, "Success", f"Images uploaded successfully to folder: {output_folder}")
-
-    def get_shared_folder_path_for_documents(self):
-        # Define a unified shared folder path
-        shared_folder_path = r"\\192.168.141.214\Shared MPC Files\Shared MPC Files\Documents"
-
-        # Check if the shared folder is accessible
-        if not os.path.exists(shared_folder_path):
-            raise Exception(f"The shared folder '{shared_folder_path}' does not exist or is inaccessible!")
-
-        return shared_folder_path
+            for file_path in selected_files:
+                try:
+                    shutil.copy(file_path, output_folder)
+                except Exception as e:
+                    QMessageBox.critical(None, "Error", f"Could not copy file {file_path}: {str(e)}")
+                    return
+            QMessageBox.information(None, "Success", f"Images uploaded successfully to folder: {output_folder}")
+        except Exception as e:
+            error_message = f"Error in upload_images with title '{project_title}': {str(e)}"
+            QMessageBox.critical(None, "Error", error_message)
 
     def upload_documents(self):
-        # Retrieve the project title
         project_title = self.Title_Line.text().strip()
         if not project_title:
             QMessageBox.warning(None, "Warning", "Please enter a Project/Activity Title before uploading!")
             return
-
-        # Sanitize the project title
-        sanitized_title = "".join(c for c in project_title if c not in r'\/:*?"<>|')
-
+        sanitized_title = self.sanitize_string(project_title)
         try:
-            # Get the unified shared folder path
-            shared_folder_path = self.get_shared_folder_path_for_documents()
-
-            # Create a subfolder for the project title
+            shared_folder_path = self.get_shared_folder_path(folder_type="Documents")
             folder_path = os.path.join(shared_folder_path, sanitized_title)
+            folder_path = self.get_unique_folder_path(folder_path)  # Reuse the helper method
+            os.makedirs(folder_path)
 
-            # Ensure the folder exists
-            os.makedirs(folder_path, exist_ok=True)
-
-            # Open a file dialog for selecting documents
             file_dialog = QFileDialog()
             file_dialog.setFileMode(QFileDialog.FileMode.ExistingFiles)
-            file_dialog.setNameFilters(["All Files (*.*)"])  # Allow all file types
+            file_dialog.setNameFilters(["All Files (*.*)"])
             selected_files, _ = file_dialog.getOpenFileNames(self.centralwidget, "Select Documents")
 
             if not selected_files:
-                # If no files are selected, return
                 return
 
-            # Copy the selected files to the folder
-            for file_path in selected_files:
+            excluded_extensions = {".png", ".gif", ".bmp", ".tiff", ".webp"}
+            filtered_files = [
+                file for file in selected_files
+                if os.path.splitext(file)[1].lower() not in excluded_extensions
+            ]
+
+            if not filtered_files:
+                QMessageBox.warning(None, "Warning", "No valid document files selected!")
+                return
+
+            for file_path in filtered_files:
                 try:
                     shutil.copy(file_path, folder_path)
                 except Exception as e:
                     QMessageBox.critical(None, "Error", f"Could not copy file {file_path}: {str(e)}")
                     return
 
-            # Notify user of successful upload
             QMessageBox.information(None, "Success", f"Documents uploaded successfully to folder: {folder_path}")
+
         except Exception as e:
             QMessageBox.critical(None, "Error", f"Failed to upload documents: {str(e)}")
 
@@ -642,28 +717,18 @@ class Ui_Main_Window(object):
             QMessageBox.critical(None, "Error", f"Failed to open folder: {str(e)}")
 
     def open_document_folder(self):
-        # Retrieve the project title entered in Title_Line
         project_title = self.Title_Line.text().strip()
         if not project_title:
             QMessageBox.warning(None, "Warning", "Please enter a Project/Activity Title first!")
             return
-
-        # Sanitize the project title
         sanitized_title = "".join(c for c in project_title if c not in r'\/:*?"<>|')
 
         try:
-            # Get the unified shared folder path
-            shared_folder_path = self.get_shared_folder_path_for_documents()
-
-            # Construct the folder path within the shared folder
+            shared_folder_path = self.get_shared_folder_path(folder_type="Documents")
             folder_to_open = os.path.join(shared_folder_path, sanitized_title)
-
-            # Check if the folder exists
             if not os.path.exists(folder_to_open):
-                QMessageBox.warning(None, "Error", f"No folder found for: '{project_title}'.")
+                QMessageBox.warning(None, "Error", f"No folder found in 'Documents' for: '{project_title}'.")
                 return
-
-            # Open the folder
             if os.name == "nt":  # For Windows systems
                 os.startfile(folder_to_open)
             elif os.name == "posix":  # For macOS/Linux systems
@@ -774,12 +839,13 @@ class Ui_Main_Window(object):
             self.SOF_cb.setCurrentText(row_data.get("Source of Fund", "") or "")
 
             # Add "Php." prefix and format
-            self.TC_Line.setText(f"Php. {row_data.get('Total Cost', '0.00'):.2f}"
-                                 if row_data.get("Total Cost") else "Php. 0.00")
-            self.AB_Line.setText(f"Php. {row_data.get('Approved Budget in Contract (ABC)', '0.00'):.2f}"
-                                 if row_data.get("Approved Budget in Contract (ABC)") else "Php. 0.00")
-            self.TCI_Line.setText(f"Php. {row_data.get('Total Cost Incurred to Date', '0.00'):.2f}"
-                                  if row_data.get("Total Cost Incurred to Date") else "Php. 0.00")
+            self.TC_Line.setText(
+                f"Php. {float(row_data.get('Bid Cost', 0.00)):,}" if row_data.get("Bid Cost") else "Php. 0.00")
+            self.AB_Line.setText(
+                f"Php. {float(row_data.get('Approved Budget of Contract (ABC)', 0.00)):,}" if row_data.get(
+                    "Approved Budget of Contract (ABC)") else "Php. 0.00")
+            self.TCI_Line.setText(f"Php. {float(row_data.get('Total Cost Incurred to Date', 0.00)):,}" if row_data.get(
+                "Total Cost Incurred to Date") else "Php. 0.00")
 
             # Handle Date Fields
             def safe_date(value):
@@ -789,24 +855,17 @@ class Ui_Main_Window(object):
                     return QDate.fromString(value, "yyyy-MM-dd") or QDate.currentDate()  # Handle string dates
                 return QDate.currentDate()
 
-            self.DON_Date.setDate(safe_date(row_data.get("Notice to Proceed")))
+            self.DON_Date.setDate(safe_date(row_data.get("Notice of Award")))
             self.DS_Date.setDate(safe_date(row_data.get("Date Started")))
             self.DTC_Date.setDate(safe_date(row_data.get("Target Completion Date")))
-            self.ID_Date.setDate(safe_date(row_data.get("Inspection Date")))
-
-            self.CD_sb.setValue(int(row_data.get("No. of Calendar Days", 0)))
+            self.ID_Date.setDate(safe_date(row_data.get("Latest Inspection Date")))
+            self.CD_sb.setValue(int(row_data.get("Duration of Calendar Days", 0)))
             self.Ext_sb.setValue(int(row_data.get("No. of Extension", 0)))
             self.ProjStat_sb.setValue(int(row_data.get("Project Status (%)", 0)))
             self.Remarks_Line.setPlainText(row_data.get("Remarks", "") or "N/A")
             self.ProjCoord_Line.setText(row_data.get("Project Coordinator", "") or "")
             self.Cont_Line.setText(row_data.get("Contractor", "") or "")
             self.Enc_Line.setText(row_data.get("Encoder", "") or "")
-
-            # Toggle visibility of buttons (if necessary)
-            self.Submit_btn.setVisible(False)
-            self.Edit_btn.setVisible(True)
-            self.CancelEdit_btn.setVisible(True)
-            self.ClearAll_btn.setVisible(False)
 
             # Visually make fields non-editable
             non_editable_style = "background-color: lightgray; color: black;"
@@ -831,6 +890,12 @@ class Ui_Main_Window(object):
                 elif isinstance(widget, QtWidgets.QSpinBox):
                     widget.setReadOnly(True)
                     widget.setStyleSheet(non_editable_style)
+
+            # Toggle visibility of buttons (if necessary)
+            self.Submit_btn.setVisible(False)
+            self.Edit_btn.setVisible(True)
+            self.CancelEdit_btn.setVisible(True)
+            self.ClearAll_btn.setVisible(False)
 
         except Exception as e:
             print(f"Error populating fields: {e}")
@@ -872,7 +937,6 @@ class Ui_Main_Window(object):
         self.ClearAll_btn.setVisible(True)
 
     def save_edit_data(self):
-        self.enable_all_fields()
         project_id = self.Id_Line.text()  # Assuming the hidden ID field holds the primary key
         project_encoder = self.Enc_Line.text()
         project_title = self.Title_Line.text()
@@ -930,14 +994,13 @@ class Ui_Main_Window(object):
             QtWidgets.QMessageBox.information(None, "Success", "Data updated successfully!")
 
         self.clear_all_fields()
+        self.enable_all_fields()
         self.Edit_btn.setVisible(False)
         self.Submit_btn.setVisible(True)
         self.CancelEdit_btn.setVisible(False)
         self.ClearAll_btn.setVisible(True)
 
 if __name__ == "__main__":
-    import sys
-
     app = QtWidgets.QApplication(sys.argv)
     Main_Window = QtWidgets.QMainWindow()
     ui = Ui_Main_Window()
@@ -949,4 +1012,3 @@ if __name__ == "__main__":
 
     Main_Window.show()
     sys.exit(app.exec())
-

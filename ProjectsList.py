@@ -3,7 +3,9 @@ from PyQt6.QtCore import QDate
 from PyQt6 import QtWidgets
 from PyQt6.QtSql import QSqlDatabase, QSqlTableModel
 from PyQt6.QtCore import pyqtSignal, Qt
+from PyQt6.QtGui import QPixmap, QTransform
 import os
+import sys
 from pathlib import Path
 import pandas as pd
 from PyQt6 import QtCore, QtGui, QtWidgets
@@ -45,6 +47,21 @@ class Ui_Project_Window(QtWidgets.QWidget):
         Project_Window.setMinimumSize(1110, 590)
         self.centralwidget = QtWidgets.QWidget(parent=Project_Window)
         self.centralwidget.setObjectName("centralwidget")
+
+        # Set the background image using a style sheet
+        bg_image_path = Ui_Project_Window.resource_path("BGP2.png")
+        Project_Window.setStyleSheet(f"""
+               QMainWindow {{
+                   background-image: url("{bg_image_path.replace('\\', '/')}");
+                   background-repeat: no-repeat;
+                   background-position: center;
+                   background-size: cover;
+               }}
+           """)
+        self.WM_lb = QtWidgets.QLabel(parent=self.centralwidget)
+        self.WM_lb.setGeometry(QtCore.QRect(3, 2, 200, 16))
+        self.WM_lb.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
+        self.WM_lb.setObjectName("WM_lb")
 
         # Create main vertical layout
         self.main_layout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -150,7 +167,7 @@ class Ui_Project_Window(QtWidgets.QWidget):
         self.DBViewer = QtWidgets.QTableView(parent=self.centralwidget)
         self.DBViewer.setObjectName("DBViewer")
         self.DBViewer.verticalHeader().setVisible(False)  # Hide the row numbering column
-        self.DBViewer.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Fixed)
+        self.DBViewer.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
         self.DBViewer.setEditTriggers(QtWidgets.QAbstractItemView.EditTrigger.NoEditTriggers)
         self.DBViewer.doubleClicked.connect(self.handle_row_double_click)
         self.main_layout.addWidget(self.DBViewer)
@@ -177,6 +194,7 @@ class Ui_Project_Window(QtWidgets.QWidget):
     def retranslateUi(self, Project_Window):
         _translate = QtCore.QCoreApplication.translate
         Project_Window.setWindowTitle(_translate("Project_Window", "Projects List"))
+        self.WM_lb.setText(_translate("Project_Window", "Developed by: J. Masunsong"))
         self.Filter_lb.setText(_translate("Project_Window", "Filtered by:"))
         self.Filter_cb.setItemText(0, _translate("Project_Window", "Tracking Number"))
         self.Filter_cb.setItemText(1, _translate("Project_Window", "Project Year"))
@@ -197,6 +215,17 @@ class Ui_Project_Window(QtWidgets.QWidget):
         self.Show_btn.setText(_translate("Project_Window", "Show Full Table"))
         self.Revert_btn.setText(_translate("Project_Window", "Revert"))
         self.Transfer_btn.setText(_translate("Project_Window", "Transfer Data to Excel"))
+
+    @staticmethod
+    def resource_path(relative_path):
+        """Get the absolute path to a resource, works for PyInstaller."""
+        try:
+            # For when the application is bundled with PyInstaller
+            base_path = sys._MEIPASS
+        except AttributeError:
+            # For regular Python execution
+            base_path = os.path.abspath(".")
+        return os.path.join(base_path, relative_path)
 
     def setupDatabase(self):
         self.db = QSqlDatabase.addDatabase('QMYSQL')
@@ -233,16 +262,16 @@ class Ui_Project_Window(QtWidgets.QWidget):
             "project_year": "Project Year",
             "project_title": "Project/Activity Title",
             "project_location": "Location",
-            "project_totalcost": "Total Cost",
-            "project_budget": "Approved Budget in Contract (ABC)",
-            "date_notice": "Notice to Proceed",
+            "project_totalcost": "Bid Cost",
+            "project_budget": "Approved Budget of Contract (ABC)",
+            "date_notice": "Notice of Award",
             "date_start": "Date Started",
-            "date_days": "No. of Calendar Days",
+            "date_days": "Duration of Calendar Days",
             "date_extension": "No. of Extension",
             "date_target": "Target Completion Date",
             "project_status": "Project Status (%)",
             "project_incurred": "Total Cost Incurred to Date",
-            "date_inspection": "Inspection Date",
+            "date_inspection": "Latest Inspection Date",
             "project_photos": "Photos",
             "project_remarks": "Remarks",
             "project_coordinator": "Project Coordinator",
@@ -613,7 +642,6 @@ class Ui_Project_Window(QtWidgets.QWidget):
         self.row_data_signal.emit(row_data)
 
 if __name__ == "__main__":
-    import sys
     app = QtWidgets.QApplication(sys.argv)
     Project_Window = QtWidgets.QMainWindow()
     ui = Ui_Project_Window()
